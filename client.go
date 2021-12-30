@@ -19,22 +19,24 @@ type ghClient struct {
 }
 
 func (c *ghClient) listIssueComments(org, repo string, number int32) ([]issueComment, error) {
-	var r []issueComment
-
 	v, err := c.ListPRComments(org, repo, number)
 	if err != nil {
-		return r, err
+		return nil, err
 	}
 
-	for _, i := range v {
-		ct, _ := time.Parse(time.RFC3339, i.CreatedAt)
+	r := make([]issueComment, len(v))
 
-		r = append(r, issueComment{
-			ID:        i.Id,
-			Body:      i.Body,
-			User:      i.User.GetLogin(),
+	for i := range v {
+		item := &v[i]
+
+		ct, _ := time.Parse(time.RFC3339, item.CreatedAt)
+
+		r[i] = issueComment{
+			ID:        item.Id,
+			Body:      item.Body,
+			User:      item.User.GetLogin(),
 			CreatedAt: ct,
-		})
+		}
 	}
 
 	sort.SliceStable(r, func(i, j int) bool {
@@ -63,10 +65,11 @@ func (gc *ghClient) getChangedFiles(org, repo string, number int32) ([]string, e
 		return nil, fmt.Errorf("cannot get PR changes for %s/%s#%d", org, repo, number)
 	}
 
-	var v []string
-	for _, change := range changes {
-		v = append(v, change.Filename)
+	v := make([]string, len(changes))
+	for i := range changes {
+		v[i] = changes[i].Filename
 	}
+
 	return v, nil
 }
 
