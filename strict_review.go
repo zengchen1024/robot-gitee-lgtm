@@ -223,13 +223,7 @@ func (sr *strictReview) fileReviewers() (map[string]sets.String, error) {
 	m := map[string]sets.String{}
 
 	for _, filename := range filenames {
-		s := sets.NewString()
-		v := ro.Approvers(filename).Union(ro.Reviewers(filename))
-		for k := range v {
-			s.Insert(normalizeLogin(k))
-		}
-
-		m[filename] = s
+		m[filename] = ro.Approvers(filename).Union(ro.Reviewers(filename))
 	}
 
 	return m, nil

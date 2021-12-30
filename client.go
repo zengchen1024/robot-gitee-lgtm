@@ -74,5 +74,5 @@ func (gc *ghClient) getChangedFiles(org, repo string, number int32) ([]string, e
 }
 
 func normalizeLogin(s string) string {
-	return strings.TrimPrefix(strings.ToLower(s), "@")
+	return strings.ToLower(s)
 }
