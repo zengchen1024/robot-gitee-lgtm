@@ -111,7 +111,7 @@ type prInfoOnNoteEvent struct {
 }
 
 func (p prInfoOnNoteEvent) hasLabel(l string) bool {
-	return p.e.GetIssueLabelSet().Has(l)
+	return p.e.GetPRLabelSet().Has(l)
 }
 
 func (p prInfoOnNoteEvent) getPRAuthor() string {
